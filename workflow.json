@@ -1,0 +1,259 @@
+{
+  "1": {
+    "inputs": {
+      "value": "worst quality, low quality, lowres, bad anatomy, watermark, text, signature,  "
+    },
+    "class_type": "PrimitiveStringMultiline",
+    "_meta": {
+      "title": "Negative"
+    }
+  },
+  "2": {
+    "inputs": {
+      "value": ""
+    },
+    "class_type": "PrimitiveStringMultiline",
+    "_meta": {
+      "title": "Positive"
+    }
+  },
+  "5": {
+    "inputs": {
+      "ckpt_name": "realcorePony_v20.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "8": {
+    "inputs": {
+      "seed": -1
+    },
+    "class_type": "Seed (rgthree)",
+    "_meta": {
+      "title": "Seed (rgthree)"
+    }
+  },
+  "9": {
+    "inputs": {
+      "resolution": "832x1216 (0.68)",
+      "batch_size": 1,
+      "width_override": 0,
+      "height_override": 0
+    },
+    "class_type": "SDXLEmptyLatentSizePicker+",
+    "_meta": {
+      "title": "🔧 SDXL Empty Latent Size Picker"
+    }
+  },
+  "20:28": {
+    "inputs": {
+      "value": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "seed"
+    }
+  },
+  "20:21": {
+    "inputs": {
+      "lora_name": "dmd2_sdxl_4step_lora.safetensors",
+      "strength_model": 1,
+      "strength_clip": 1,
+      "prompt": "",
+      "example": "[none]",
+      "model": [
+        "5",
+        0
+      ],
+      "clip": [
+        "5",
+        1
+      ]
+    },
+    "class_type": "LoraLoader|pysssss",
+    "_meta": {
+      "title": "Lora Loader 🐍"
+    }
+  },
+  "20:11": {
+    "inputs": {
+      "text": [
+        "2",
+        0
+      ],
+      "token_normalization": "length+mean",
+      "weight_interpretation": "compel",
+      "clip": [
+        "20:21",
+        1
+      ]
+    },
+    "class_type": "BNK_CLIPTextEncodeAdvanced",
+    "_meta": {
+      "title": "CLIP Text Encode (Positive)"
+    }
+  },
+  "20:12": {
+    "inputs": {
+      "text": [
+        "1",
+        0
+      ],
+      "token_normalization": "length+mean",
+      "weight_interpretation": "compel",
+      "clip": [
+        "20:21",
+        1
+      ]
+    },
+    "class_type": "BNK_CLIPTextEncodeAdvanced",
+    "_meta": {
+      "title": "CLIP Text Encode (Negative)"
+    }
+  },
+  "20:63": {
+    "inputs": {
+      "seed": [
+        "20:28",
+        0
+      ],
+      "steps": 6,
+      "cfg": 2,
+      "sampler_name": "lcm",
+      "scheduler": "karras",
+      "denoise": 1,
+      "model": [
+        "20:21",
+        0
+      ],
+      "positive": [
+        "20:11",
+        0
+      ],
+      "negative": [
+        "20:12",
+        0
+      ],
+      "latent_image": [
+        "9",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "20:58": {
+    "inputs": {
+      "upscale_method": "bislerp",
+      "scale_by": 1.5,
+      "samples": [
+        "20:63",
+        0
+      ]
+    },
+    "class_type": "LatentUpscaleBy",
+    "_meta": {
+      "title": "Upscale Latent By"
+    }
+  },
+  "20:66": {
+    "inputs": {
+      "seed": [
+        "20:28",
+        0
+      ],
+      "steps": 6,
+      "cfg": 1.5,
+      "sampler_name": "lcm",
+      "scheduler": "sgm_uniform",
+      "denoise": 0.5,
+      "model": [
+        "20:21",
+        0
+      ],
+      "positive": [
+        "20:11",
+        0
+      ],
+      "negative": [
+        "20:12",
+        0
+      ],
+      "latent_image": [
+        "20:58",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler (Refine)"
+    }
+  },
+  "20:43": {
+    "inputs": {
+      "samples": [
+        "20:66",
+        0
+      ],
+      "vae": [
+        "5",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "99": {
+    "inputs": {
+      "filename": "%time_%seed",
+      "path": "",
+      "extension": "png",
+      "steps": 6,
+      "cfg": 2,
+      "modelname": "realcorePony_v20.safetensors",
+      "sampler_name": "lcm",
+      "scheduler": "karras",
+      "positive": [
+        "2",
+        0
+      ],
+      "negative": [
+        "1",
+        0
+      ],
+      "seed_value": [
+        "8",
+        0
+      ],
+      "width": [
+        "9",
+        1
+      ],
+      "height": [
+        "9",
+        2
+      ],
+      "lossless_webp": false,
+      "quality_jpeg_or_webp": 100,
+      "counter": 0,
+      "time_format": "%Y-%m-%d-%H%M%S",
+      "images": [
+        "20:43",
+        0
+      ]
+    },
+    "class_type": "Save Image w/Metadata",
+    "_meta": {
+      "title": "Save Image w/Metadata"
+    }
+  }
+}
